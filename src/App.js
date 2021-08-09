@@ -1,5 +1,8 @@
-import React, { lazy, useState } from 'react'
+import React, { Component, lazy, Suspense, useState } from 'react'
 import usePhotoSearch from './usePhotoSearch'
+import MyComp from './components/MyComp';
+const MyComp = lazy(() => (import('./components/myComp')))
+
 
 export default function App() {
   const [query, setQuery] = useState('')
@@ -18,6 +21,10 @@ function handleSearch(e) {
   } = usePhotoSearch(query, pageNumber)
   return(
     <>
+    <Suspense fallback={<div>Loading.....</div>}>
+
+    
+    <MyComp></MyComp>
     <input type = "text" onChange={handleSearch}></input>
     {photos.map(photo => {
       return <div key={photo}>{photo}</div>
@@ -25,6 +32,7 @@ function handleSearch(e) {
     <div> </div>
     <div> {loading && 'Loading...'} </div>
     <div> {error && 'Error...'} </div>
+    </Suspense>
     </>
   )
 }
