@@ -1,17 +1,30 @@
-import React from 'react'
+import React, { lazy, useState } from 'react'
 import usePhotoSearch from './usePhotoSearch'
 
 export default function App() {
-  usePhotoSearch(query, pageNumber)
+  const [query, setQuery] = useState('')
+  const [pageNumber, setPageNumber] = useState(1)
+
+function handleSearch(e) {
+  setQuery(e.target.value)
+  setPageNumber(1)
+}
+
+  const {
+    photos,
+    hasMore,
+    loading,
+    error
+  } = usePhotoSearch(query, pageNumber)
   return(
     <>
-    <input type = "text"></input>
-    <div> Photo </div>
-    <div> Photo </div>
-    <div> Photo </div>
-    <div> Photo </div>
-    <div> Loading... </div>
-    <div> Error </div>
+    <input type = "text" onChange={handleSearch}></input>
+    {photos.map(photo => {
+      return <div key={photo}>{photo}</div>
+    })}
+    <div> </div>
+    <div> {loading && 'Loading...'} </div>
+    <div> {error && 'Error...'} </div>
     </>
   )
 }
